@@ -295,3 +295,4 @@ If Git actions fail:
 If Vercel deploy works but native features do not:
 
 That is expected. Vercel is browser-only for this project. Run `pnpm tauri dev` for native features.
+# git-dashboard
