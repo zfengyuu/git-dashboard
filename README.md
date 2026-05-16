@@ -1,59 +1,73 @@
 # RepoPilot
 
-RepoPilot is a Tauri v2 desktop app for scanning local workspaces, monitoring many Git repositories at once, and running common Git actions from a focused dashboard.
+RepoPilot is a Tauri v2 desktop application for scanning local workspaces, monitoring multiple Git repositories, and running common Git actions from a focused dashboard.
+
+It is designed for developers who work with many repositories at the same time and want a faster way to check repository status, sync changes, open projects, and review recent Git activity without switching between multiple terminal windows.
 
 ![RepoPilot dashboard](docs/screenshots/dashboard.png)
 
-## What This App Does
+## Overview
 
-- Scans a selected workspace folder and detects nested Git repositories.
-- Skips heavy generated folders such as `node_modules`, `dist`, `build`, `.next`, `.cache`, `target`, and `vendor`.
-- Shows branch, working tree status, ahead/behind sync state, changed file counts, last commit, and remote URL.
-- Supports refresh, fetch, pull, push, open in VS Code, and open in Terminal.
-- Supports bulk refresh, fetch, and pull for selected repositories.
-- Stores workspace, repository list, filters, search, settings, and selection in local Zustand state.
-- Stores recent action history in local SQLite through the Tauri backend.
-- Includes a command palette with `Cmd+K` on macOS or `Ctrl+K` on Windows/Linux.
+RepoPilot helps you manage local Git repositories from one desktop interface.
+
+The app can scan a selected workspace folder, detect nested Git repositories, show their current Git state, and provide quick actions such as refresh, fetch, pull, push, open in VS Code, and open in Terminal.
+
+It also includes bulk actions, search, filters, a command palette, and local activity history powered by SQLite through the Tauri backend.
+
+## Key Features
+
+- Scan a local workspace and detect nested Git repositories.
+- Automatically skip heavy generated folders such as `node_modules`, `dist`, `build`, `.next`, `.cache`, `target`, and `vendor`.
+- View repository branch, working tree status, ahead/behind state, changed file counts, last commit, and remote URL.
+- Run common Git actions directly from the dashboard.
+- Perform bulk refresh, fetch, and pull for selected repositories.
+- Search repositories by name, path, branch, or remote URL.
+- Filter repositories by status: `All`, `Clean`, `Modified`, `Ahead`, `Behind`, and `Error`.
+- Open repositories directly in VS Code or Terminal.
+- Use a command palette with `Cmd+K` on macOS or `Ctrl+K` on Windows/Linux.
+- Store workspace, repositories, filters, search, settings, and selection in local Zustand state.
+- Store recent action history in local SQLite through the Rust backend.
 
 ## Important Deployment Note
 
-RepoPilot is primarily a desktop app. The Tauri backend is required for native features:
+RepoPilot is primarily a native desktop application.
 
-- scanning real local folders
-- running Git CLI commands
-- writing SQLite activity history through Rust
-- opening VS Code or Terminal
+The Tauri backend is required for native capabilities such as:
 
-Vercel can deploy only the Vite/React frontend preview. On Vercel, the app runs in browser fallback mode with sample data and cannot access the visitor's filesystem or native Git commands.
+- Scanning real local folders.
+- Running Git CLI commands.
+- Writing SQLite activity history through Rust.
+- Opening local projects in VS Code or Terminal.
 
-Use Vercel for visual review only. Use `pnpm tauri dev` or the packaged `.app` for real RepoPilot behavior.
+Vercel can only deploy the Vite/React browser preview. In the browser preview, RepoPilot runs with fallback behavior and sample data. It cannot access the visitor's filesystem or execute native Git commands.
+
+Use Vercel for UI review only. Use `pnpm tauri dev` or a packaged desktop build for real RepoPilot behavior.
 
 ## Tech Stack
 
-- Tauri v2
-- React
-- TypeScript
-- Vite
-- Tailwind CSS
-- shadcn-style local UI primitives
-- Zustand
-- Sonner
-- Lucide React
-- Rust
-- SQLite via `rusqlite`
-- Vitest
+| Area | Technologies |
+| --- | --- |
+| Desktop runtime | Tauri v2 |
+| Frontend | React, TypeScript, Vite |
+| Styling | Tailwind CSS, shadcn-style local UI primitives |
+| State management | Zustand |
+| Notifications | Sonner |
+| Icons | Lucide React |
+| Backend | Rust |
+| Local database | SQLite via `rusqlite` |
+| Testing | Vitest, Cargo tests |
 
 ## Prerequisites
 
 Install these before running the project locally:
 
-1. Node.js 24 or newer
-2. pnpm 10 or newer
-3. Rust stable with `cargo`
-4. Git
-5. Xcode Command Line Tools on macOS
+- Node.js 24 or newer
+- pnpm 10 or newer
+- Rust stable with `cargo`
+- Git
+- Xcode Command Line Tools on macOS
 
-Check your machine:
+Check your local environment:
 
 ```bash
 node --version
@@ -63,7 +77,7 @@ cargo --version
 git --version
 ```
 
-If Rust is missing:
+If Rust is missing, install it with:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -81,28 +95,35 @@ cd "/Users/phongvudzz/Documents/Git Dashboard"
 pnpm install
 ```
 
-## Run Locally as a Desktop App
+## Run as a Desktop App
 
-This is the main way to test RepoPilot:
+This is the main development mode for testing real RepoPilot behavior.
 
 ```bash
 pnpm tauri dev
 ```
 
-Then test this flow:
+Suggested test flow:
 
 1. Click `Select Workspace`.
 2. Choose a folder that contains one or more Git repositories.
 3. Confirm repositories appear in the dashboard table.
-4. Use search by repository name, path, branch, or remote URL.
-5. Try filters: `All`, `Clean`, `Modified`, `Ahead`, `Behind`, `Error`.
+4. Search by repository name, path, branch, or remote URL.
+5. Try filters: `All`, `Clean`, `Modified`, `Ahead`, `Behind`, and `Error`.
 6. Select one or more repositories.
 7. Run `Refresh Selected`, `Fetch Selected`, or `Pull Selected`.
-8. Open a row menu and test `View Details`, `Refresh`, `Fetch`, `Pull`, `Push`, `Open in VS Code`, and `Open in Terminal`.
+8. Open a row menu and test:
+   - `View Details`
+   - `Refresh`
+   - `Fetch`
+   - `Pull`
+   - `Push`
+   - `Open in VS Code`
+   - `Open in Terminal`
 9. Press `Cmd+K` or `Ctrl+K` and test the command palette.
 10. Confirm recent actions appear in the activity panel.
 
-## Run Locally as a Browser Preview
+## Run as a Browser Preview
 
 This mode is useful for UI checks only. It uses browser fallback behavior and sample repositories.
 
@@ -118,12 +139,12 @@ http://127.0.0.1:1420/
 
 Browser preview limitations:
 
-- It cannot scan real local folders.
-- It cannot run real Git commands.
-- It cannot open local VS Code or Terminal through Tauri.
-- It cannot use the native SQLite backend.
+- Cannot scan real local folders.
+- Cannot run real Git commands.
+- Cannot open local VS Code or Terminal through Tauri.
+- Cannot use the native SQLite backend.
 
-## Test Locally
+## Test and Build
 
 Run all standard checks from the project root:
 
@@ -139,11 +160,11 @@ pnpm tauri build
 
 Expected successful output:
 
-- `pnpm test`: all Vitest tests pass
-- `pnpm lint`: no ESLint errors
-- `pnpm build`: Vite production build succeeds
-- `cargo test`: Rust tests pass
-- `pnpm tauri build`: macOS app and DMG are created
+- `pnpm test`: all Vitest tests pass.
+- `pnpm lint`: no ESLint errors.
+- `pnpm build`: Vite production build succeeds.
+- `cargo test`: Rust tests pass.
+- `pnpm tauri build`: desktop app and installer artifacts are created.
 
 Build artifacts:
 
@@ -164,7 +185,7 @@ git add .
 git commit -m "Build RepoPilot v0.2"
 ```
 
-Create a GitHub repository, then connect it:
+Create a GitHub repository and push:
 
 ```bash
 gh auth login
@@ -180,7 +201,7 @@ git push -u origin main
 
 Replace `<your-github-username>` with your GitHub username.
 
-## Vercel Deployment Steps
+## Vercel Deployment
 
 Vercel deploys the browser preview only.
 
@@ -222,7 +243,7 @@ After GitHub is connected to Vercel:
 3. Select `Vite` as the framework.
 4. Keep the build settings from `vercel.json`.
 5. Deploy.
-6. Every push to `main` creates a production deployment if your Vercel project is configured that way.
+6. Every push to `main` can create a production deployment if the Vercel project is configured that way.
 7. Pull requests and non-production branches create preview deployments.
 
 ## Project Structure
@@ -255,44 +276,90 @@ After GitHub is connected to Vercel:
 
 ## Native Command Surface
 
-The Tauri backend exposes:
+The Tauri backend exposes the following commands:
 
-- `scan_workspace(path)`
-- `refresh_repository(repoPath)`
-- `refresh_repositories(repoPaths)`
-- `fetch_repository(repoPath)`
-- `pull_repository(repoPath)`
-- `push_repository(repoPath)`
-- `open_in_vscode(repoPath, command)`
-- `open_in_terminal(repoPath, command)`
-- `get_recent_activity(limit)`
-- `record_activity(input)`
-- `clear_recent_activity()`
+| Command | Purpose |
+| --- | --- |
+| `scan_workspace(path)` | Scan a workspace folder and detect Git repositories. |
+| `refresh_repository(repoPath)` | Refresh one repository status. |
+| `refresh_repositories(repoPaths)` | Refresh multiple repositories. |
+| `fetch_repository(repoPath)` | Run fetch for one repository. |
+| `pull_repository(repoPath)` | Run pull for one repository. |
+| `push_repository(repoPath)` | Run push for one repository. |
+| `open_in_vscode(repoPath, command)` | Open a repository in VS Code. |
+| `open_in_terminal(repoPath, command)` | Open a repository in Terminal. |
+| `get_recent_activity(limit)` | Read recent local activity history. |
+| `record_activity(input)` | Save an activity record. |
+| `clear_recent_activity()` | Clear recent activity history. |
 
 ## Troubleshooting
 
-If `pnpm tauri dev` fails because Rust is missing:
+### `pnpm tauri dev` fails because Rust is missing
+
+Run:
 
 ```bash
 source "$HOME/.cargo/env"
 rustup update
 ```
 
-If the app opens but no repositories appear:
+Then check again:
+
+```bash
+rustc --version
+cargo --version
+```
+
+### The app opens but no repositories appear
+
+Check the following:
 
 1. Make sure the selected workspace contains folders with `.git`.
 2. Make sure those repositories are not inside ignored folders such as `node_modules`, `dist`, `build`, `.next`, `.cache`, `target`, or `vendor`.
 3. Try selecting a smaller workspace folder first.
 
-If Git actions fail:
+### Git actions fail
 
-1. Confirm Git is installed with `git --version`.
-2. Open the repository in Terminal.
-3. Run `git status`.
-4. Run the failing command manually, for example `git fetch` or `git pull`.
-5. Fix auth, conflict, or upstream issues in Git, then retry in RepoPilot.
+Check the repository manually:
 
-If Vercel deploy works but native features do not:
+```bash
+git status
+git fetch
+git pull
+```
 
-That is expected. Vercel is browser-only for this project. Run `pnpm tauri dev` for native features.
+Then fix any authentication, conflict, upstream, or remote issues before retrying in RepoPilot.
+
+### Vercel deploy works but native features do not
+
+This is expected. Vercel is browser-only for this project. Run the desktop app with:
+
+```bash
+pnpm tauri dev
+```
+
+## Product Direction
+
+RepoPilot aims to become a focused desktop workspace manager for developers working across multiple Git repositories.
+
+Future improvements may include:
+
+- Repository grouping.
+- Custom workspace profiles.
+- Branch switching.
+- Commit and stash workflows.
+- Conflict visibility.
+- Smarter repository health indicators.
+- More detailed activity reports.
+
+## Status
+
+RepoPilot is currently in active desktop MVP development.
+
+The current version focuses on workspace scanning, repository status monitoring, common Git actions, bulk operations, command palette support, and local activity history.
+
+## License
+
+Add your license here.
+
 # git-dashboard
